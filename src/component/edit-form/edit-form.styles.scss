@@ -1,0 +1,17 @@
+.edit-form {
+  width: 400px;
+  height: 200px;
+  background-color: rgb(68, 170, 218);
+  margin: auto;
+  border-radius: 30px;
+}
+label {
+  display: block;
+}
+input[type="text"] {
+  border-radius: 30px;
+  border: none;
+  padding: 5px;
+  height: 60px;
+  width: 80%;
+}

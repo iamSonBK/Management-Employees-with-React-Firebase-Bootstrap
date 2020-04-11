@@ -1,0 +1,45 @@
+.post {
+  position: relative;
+  left: 13%;
+  max-width: 87%;
+  max-height: 800px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.container {
+  width: 300px;
+  height: 200px;
+  background-color: wheat;
+  margin: 10px;
+  overflow: scroll;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.readmore {
+  text-decoration: none;
+  color: black;
+}
+Link {
+  text-decoration: none;
+}
+.add-form .btn-new {
+  position: fixed;
+  padding: 10px;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+}
+.add-form {
+  position: fixed;
+  z-index: 3;
+  margin-right: 120px;
+  right: 0;
+  bottom: 0;
+}
+.add-form input {
+  display: block;
+  margin: auto;
+}

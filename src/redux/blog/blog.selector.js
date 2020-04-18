@@ -1,8 +1,8 @@
-import { createSelector } from "reselect";
+// import { createSelector } from "reselect";
 
-const selectPost = (state) => state.post;
+// const selectPost = (state) => state.post;
 
-export const addPostHidden = createSelector(
-  [selectPost],
-  (post) => post.hidden
-);
+// export const addPostHidden = createSelector(
+//   [selectPost],
+//   (post) => post.hidden
+// );

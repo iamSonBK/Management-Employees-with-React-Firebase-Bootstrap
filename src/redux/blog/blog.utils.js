@@ -15,7 +15,9 @@ export const editPost = (updatePost) => {
 };
 
 export const deletePost = (post) => {
-  const id = post.id - 1;
+  const id = post.id;
+  console.log(id);
+
   firebase
     .database()
     .ref("/posts/" + id)

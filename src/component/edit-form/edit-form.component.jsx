@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { editPost } from "../../redux/blog/blog.action";
+import { editPostStart } from "../../redux/blog/blog.action";
 import "./edit-form.styles.scss";
-const EditForm = ({ id, post, editPost }) => {
+
+const EditForm = ({ id, userId, post, editPost }) => {
   const [updatePost, setUpdateNewPost] = useState({
     id: id,
+    userId: userId,
     title: "",
     body: "",
   });
@@ -41,6 +43,6 @@ const EditForm = ({ id, post, editPost }) => {
   );
 };
 const mapDispatchToProps = (dispatch) => ({
-  editPost: (updatePost) => dispatch(editPost(updatePost)),
+  editPost: (updatePost) => dispatch(editPostStart(updatePost)),
 });
 export default connect(null, mapDispatchToProps)(EditForm);

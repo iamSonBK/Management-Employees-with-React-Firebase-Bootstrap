@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { addNewPost, addPostFormHidden } from "../../redux/blog/blog.action";
+import { addNewPostStart } from "../../redux/blog/blog.action";
 import "./add-form.styles.scss";
-const AddForm = ({ addNewPost, addPostHidden }) => {
+const AddForm = ({ addNewPost }) => {
   const [newPost, setNewPost] = useState({
     title: "",
     body: "",
@@ -12,7 +12,7 @@ const AddForm = ({ addNewPost, addPostHidden }) => {
     event.preventDefault();
 
     addNewPost(newPost);
-    addPostHidden();
+    console.log(newPost);
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -33,7 +33,6 @@ const AddForm = ({ addNewPost, addPostHidden }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addNewPost: (newPost) => dispatch(addNewPost(newPost)),
-  addPostHidden: () => dispatch(addPostFormHidden()),
+  addNewPost: (newPost) => dispatch(addNewPostStart(newPost)),
 });
 export default connect(null, mapDispatchToProps)(AddForm);

@@ -1,65 +1,94 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-
-import { Link } from "react-router-dom";
+import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import AddForm from "../../component/add-form/add-form.component";
-import {
-  addPostFormHidden,
-  fetchCollectionsStart,
-} from "../../redux/blog/blog.action";
-
-import "./blog.styles.scss";
-function Blog({ collections, hidden, addPostHidden, isLoading }) {
-  // const [posts, setPosts] = useState(collections);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [postPerPage, setPostPerPage] = useState(20);
-  // //Get current post
-  // console.log(collections);
-  // const indexOfLastPost = currentPage * postPerPage;
-  // const indexOfFirstPost = indexOfLastPost - postPerPage;
-  // const currentPosts = collections.slice(indexOfFirstPost, indexOfLastPost);
-  // console.log(currentPosts);
-  // console.log(typeof currentPosts);
-
+import firebase from "../../firebase/firebase.utils";
+function Blog({ isLoading, collections }) {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [postId, setPostId] = useState("");
+  const handleClick = (post) => {
+    setTitle(post.title);
+    setBody(post.body);
+    setPostId(post.id);
+  };
+  async function handleDelete(postId) {
+    await firebase
+      .firestore()
+      .collection("posts")
+      .doc(postId)
+      .delete()
+      .then(() => {
+        console.log("Success!");
+      });
+  }
   return (
     <div>
-      <div className="add-form">
-        <button onClick={addPostHidden} className="btn-new">
-          +
-        </button>
-        {hidden ? <AddForm /> : null}
-      </div>
+      <Card style={{ borderBottom: "none" }}>
+        <Card.Body>
+          <Card.Title>TO DO LIST</Card.Title>
+          <Card.Text>
+            Some quick example text to build on the card title and make up the
+            bulk of the card's content.
+          </Card.Text>
+          <AddForm id={postId} title={title} body={body} />
+        </Card.Body>
+        {isLoading ? (
+          <h1>Loading...</h1>
+        ) : (
+          <Container>
+            <Row>
+              {collections.length > 0 &&
+                collections.map((post) => (
+                  <Col xs={3} key={post.id}>
+                    <Card style={{ width: "17rem", marginBottom: "1rem" }}>
+                      <Card.Header>{post.title}</Card.Header>
 
-      {isLoading ? (
-        <h1>Loading....</h1>
-      ) : (
-        <div className="post">
-          {collections.length > 0 &&
-            collections.map((post) => (
-              <div className="container" key={post.id}>
-                <h3>{post.title}</h3>
-                <span>{post.body}</span>
-                <Link to={`blog/post/${post.id}/${post.userId}`}>
-                  <span className="readmore">readmore</span>
-                </Link>
-              </div>
-            ))}
-          <div>
-            <button>Prev Page</button>
-            <button>Next Page</button>
-          </div>
-        </div>
-      )}
+                      <Card.Body>
+                        <Card.Subtitle>{post.id}</Card.Subtitle>
+                        <Card.Text>{post.body}</Card.Text>
+                        <Button
+                          variant="primary"
+                          onClick={() => handleClick(post)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          style={{ marginLeft: "0.5rem" }}
+                          onClick={() => {
+                            handleDelete(post.id);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+            </Row>
+          </Container>
+        )}
+      </Card>
+      <div
+        className="footer"
+        style={{
+          position: "absolute",
+          bottom: "0rem",
+          backgroundColor: "rgba(0, 0, 0, 0.03)",
+          width: "100%",
+          padding: "1rem 0rem",
+        }}
+      >
+        Copyright by TSM Team | 2020 | Sponsor by SonBK
+      </div>
     </div>
   );
 }
-const mapStateToProps = ({ post: { hidden, collections, isLoading } }) => ({
-  hidden,
+
+const mapStateToProps = ({ post: { collections, isLoading } }) => ({
   collections,
   isLoading,
 });
-const mapDispatchToProps = (dispatch) => ({
-  addPostHidden: () => dispatch(addPostFormHidden()),
-  fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Blog);
+
+export default connect(mapStateToProps, null)(Blog);

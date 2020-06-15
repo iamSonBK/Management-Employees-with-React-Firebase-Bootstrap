@@ -19,11 +19,12 @@ function Blog({ isLoading, collections }) {
       .doc(postId)
       .delete()
       .then(() => {
-        console.log("Success!");
+        window.location.reload();
       });
   }
   return (
     <div>
+      <div></div>
       <Card style={{ borderBottom: "none" }}>
         <Card.Body>
           <Card.Title>TO DO LIST</Card.Title>

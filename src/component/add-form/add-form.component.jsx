@@ -33,7 +33,10 @@ class AddForm extends React.Component {
         .firestore()
         .collection("posts")
         .add({ title: this.state.newPost.title, body: this.state.newPost.body })
-        .then(console.log("Add success"));
+        .then((rel) => {
+          console.log(rel);
+          window.location.reload();
+        });
     } else {
       console.log(this.state.newPost);
 
@@ -45,7 +48,10 @@ class AddForm extends React.Component {
           title: this.state.newPost.title,
           body: this.state.newPost.body,
         })
-        .then(console.log("Update success"));
+        .then((rel) => {
+          console.log(rel);
+          window.location.reload();
+        });
     }
   };
   handleChange = (event) => {

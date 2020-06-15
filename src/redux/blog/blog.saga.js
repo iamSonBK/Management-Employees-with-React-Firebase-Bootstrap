@@ -10,7 +10,8 @@ import {
 export function* fetchCollectionsAsync() {
   try {
     let data = [];
-    const response = yield firebase
+    var t0 = performance.now();
+    yield firebase
       .firestore()
       .collection("posts")
       .get()
@@ -18,9 +19,8 @@ export function* fetchCollectionsAsync() {
         snap.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
         return data;
       });
-    console.log(response);
-
-    console.log(data);
+    var t1 = performance.now();
+    console.log(t1 - t0);
 
     yield put(fetchCollectionsSuccess(data));
   } catch (error) {

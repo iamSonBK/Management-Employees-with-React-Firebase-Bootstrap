@@ -11,6 +11,7 @@ export function* fetchCollectionsAsync() {
   try {
     let data = [];
     var t0 = performance.now();
+    var sum = 0;
     yield firebase
       .firestore()
       .collection("posts")
@@ -18,9 +19,12 @@ export function* fetchCollectionsAsync() {
       .then((snap) => {
         snap.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
         return data;
+      })
+      .then(() => {
+        const t1 = performance.now();
+        sum += t1 - t0;
+        console.log(sum / 20);
       });
-    var t1 = performance.now();
-    console.log(t1 - t0);
 
     yield put(fetchCollectionsSuccess(data));
   } catch (error) {

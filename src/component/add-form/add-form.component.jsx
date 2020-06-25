@@ -13,45 +13,59 @@ class AddForm extends React.Component {
   state = {
     newPost: {
       id: this.props.id,
-      title: this.props.title,
-      body: this.props.body,
+      name: this.props.name,
+      email: this.props.email,
+      phone: this.props.phone,
     },
   };
   componentWillReceiveProps(nextProps) {
     this.setState({
       newPost: {
         id: nextProps.id,
-        title: nextProps.title,
-        body: nextProps.body,
+        name: nextProps.name,
+        email: nextProps.email,
+        phone: nextProps.phone,
       },
     });
   }
   handleSubmit = async (event) => {
+    var sum = 0;
     event.preventDefault();
     if (this.state.newPost.id === "") {
-      await firebase
-        .firestore()
-        .collection("posts")
-        .add({ title: this.state.newPost.title, body: this.state.newPost.body })
-        .then((rel) => {
-          console.log(rel);
-          window.location.reload();
-        });
+      for (var i = 0; i < 100; i++) {
+        var t0 = performance.now();
+        await firebase
+          .firestore()
+          .collection("posts")
+          .add({
+            name: `${this.state.newPost.name} ${i}`,
+            email: `${this.state.newPost.email}`,
+            phone: this.state.newPost.phone,
+          })
+          .then(() => {
+            const t1 = performance.now();
+            sum += t1 - t0;
+            console.log(sum / 50);
+          });
+      }
     } else {
-      console.log(this.state.newPost);
-
-      await firebase
-        .firestore()
-        .collection("posts")
-        .doc(this.state.newPost.id)
-        .update({
-          title: this.state.newPost.title,
-          body: this.state.newPost.body,
-        })
-        .then((rel) => {
-          console.log(rel);
-          window.location.reload();
-        });
+      for (var i = 0; i < 100; i++) {
+        var t0 = performance.now();
+        await firebase
+          .firestore()
+          .collection("posts")
+          .doc(this.state.newPost.id)
+          .update({
+            name: `${this.state.newPost.name} ${i}`,
+            email: this.state.newPost.email,
+            phone: this.state.newPost.phone,
+          })
+          .then((rel) => {
+            const t1 = performance.now();
+            sum += t1 - t0;
+            console.log(sum / 50);
+          });
+      }
     }
   };
   handleChange = (event) => {
@@ -67,27 +81,38 @@ class AddForm extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="basic-addon1">Title</InputGroup.Text>
+                  <InputGroup.Text id="basic-addon1">Name</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   onChange={this.handleChange}
-                  name="title"
-                  value={this.state.newPost.title}
-                  placeholder="Enter Title"
+                  name="name"
+                  value={this.state.newPost.name}
+                  placeholder="Enter Name"
                   aria-describedby="basic-addon1"
                 />
               </InputGroup>
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="basic-addon1">Body</InputGroup.Text>
+                  <InputGroup.Text id="basic-addon1">Email</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
-                  as="textarea"
-                  type="text"
+                  type="email"
                   onChange={this.handleChange}
-                  name="body"
-                  placeholder="Enter Somethings..."
-                  value={this.state.newPost.body}
+                  name="email"
+                  placeholder="Enter Your Email..."
+                  value={this.state.newPost.email}
+                />
+              </InputGroup>
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">Phone</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="number"
+                  onChange={this.handleChange}
+                  name="phone"
+                  placeholder="Enter Your Phone Number"
+                  value={this.state.newPost.phone}
                 />
               </InputGroup>
               <Button variant="primary" type="submit">

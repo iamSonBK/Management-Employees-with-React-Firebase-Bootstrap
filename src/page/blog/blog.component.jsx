@@ -4,23 +4,41 @@ import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import AddForm from "../../component/add-form/add-form.component";
 import firebase from "../../firebase/firebase.utils";
 function Blog({ isLoading, collections }) {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [postId, setPostId] = useState("");
   const handleClick = (post) => {
-    setTitle(post.title);
-    setBody(post.body);
+    setName(post.name);
+    setEmail(post.email);
+    setPhone(post.phone);
     setPostId(post.id);
   };
   async function handleDelete(postId) {
+    var sum = 0;
+    var t0 = performance.now();
     await firebase
       .firestore()
       .collection("posts")
-      .doc(postId)
-      .delete()
-      .then(() => {
-        window.location.reload();
+      .get()
+      .then((res) => {
+        res.forEach((element) => {
+          element.ref.delete();
+          var t1 = performance.now();
+          sum += t1 - t0;
+          console.log(sum / 100);
+        });
       });
+    // await firebase
+    //   .firestore()
+    //   .collection("posts")
+    //   .delete()
+    //   .then(() => {
+    //     var t1 = performance.now();
+    //     console.log(t1 - t0);
+
+    //     // window.location.reload();
+    //   });
   }
   return (
     <div>
@@ -32,22 +50,22 @@ function Blog({ isLoading, collections }) {
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </Card.Text>
-          <AddForm id={postId} title={title} body={body} />
+          <AddForm id={postId} name={name} email={email} phone={phone} />
         </Card.Body>
         {isLoading ? (
           <h1>Loading...</h1>
         ) : (
-          <Container>
+          <Container fuild="true">
             <Row>
               {collections.length > 0 &&
                 collections.map((post) => (
                   <Col xs={3} key={post.id}>
                     <Card style={{ width: "17rem", marginBottom: "1rem" }}>
-                      <Card.Header>{post.title}</Card.Header>
+                      <Card.Header>{post.name}</Card.Header>
 
                       <Card.Body>
-                        <Card.Subtitle>{post.id}</Card.Subtitle>
-                        <Card.Text>{post.body}</Card.Text>
+                        <Card.Text>{post.email}</Card.Text>
+                        <Card.Text>{post.phone}</Card.Text>
                         <Button
                           variant="primary"
                           onClick={() => handleClick(post)}
@@ -71,7 +89,7 @@ function Blog({ isLoading, collections }) {
           </Container>
         )}
       </Card>
-      <div
+      {/* <div
         className="footer"
         style={{
           position: "absolute",
@@ -82,7 +100,7 @@ function Blog({ isLoading, collections }) {
         }}
       >
         Copyright by TSM Team | 2020 | Sponsor by SonBK
-      </div>
+      </div> */}
     </div>
   );
 }
